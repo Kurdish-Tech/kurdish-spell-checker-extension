@@ -160,3 +160,4 @@ MIT License — Kurdish Tech Organization
 ---
 
 *Ziman jiyana mirov e. / Language is the life of a person.*
+*Kurdish Tech Organization — Preserving Kurdish language in the digital space*

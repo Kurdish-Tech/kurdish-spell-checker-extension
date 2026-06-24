@@ -43,28 +43,17 @@ SFX <flag> <strip> <add> <condition>
 
 ### Step 1 — Obtain a Kurmanci Wordlist
 
-#### Option A: Ferheng.org *(Recommended)*
-1. Visit [https://ferheng.org](https://ferheng.org)
-2. Use the export/download feature to get a Kurmanci word list
-3. Format each entry as `word` or `word/FLAGS`
-
-#### Option B: KurdishNLP Lexicon
-```bash
-git clone https://github.com/KurdishNLP/Kurmanji-Lexicon
-```
-Extract the lemma column and convert to `.dic` format.
-
-#### Option C: Existing Hunspell Kurdish Dictionary
+#### Option A: Existing Hunspell Kurdish Dictionary
 A partial Hunspell dictionary exists in the LibreOffice extension repository:
 - Search: **"LibreOffice Kurdish spell checker"**
 - Extract `.aff` and `.dic` from the `.oxt` file (it's a ZIP archive)
 - Adapt the `.aff` rules to match this extension's flag set
 
-#### Option D: OpenOffice/Mozilla Dictionaries Repository
+#### Option B: OpenOffice/Mozilla Dictionaries Repository
 ```
 https://github.com/titoBouzout/Dictionaries
 ```
-Look for `Kurdish.dic` / `Kurdish.aff` — note these may be Sorani; **verify carefully**.
+Look for `c` / `Kurdish.aff` — note these may be Sorani; **verify carefully**.
 
 ---
 
