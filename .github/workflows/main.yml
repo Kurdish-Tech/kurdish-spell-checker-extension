@@ -1,0 +1,101 @@
+name: Kurdish Kurmanci Spell Checker CI
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  validate-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-on-version: '20'
+
+      - name: Validate Manifest JSON Syntax
+        run: |
+          node -e "
+          try {
+            const fs = require('fs');
+            const manifest = JSON.parse(fs.readFileSync('manifest.json', 'utf8'));
+            console.log('manifest.json is valid JSON!');
+            if (!manifest.manifest_version || manifest.manifest_version !== 3) {
+              throw new Error('Extension must use Manifest V3 standard.');
+            }
+          } catch (err) {
+            console.error('Manifest Validation Failed:', err.message);
+            process.exit(1);
+          }
+          "
+
+      - name: Verify Hunspell Dictionary Word Count
+        run: |
+          node -e "
+          const fs = require('fs');
+          try {
+            const dicContent = fs.readFileSync('dictionary/ku_TR.dic', 'utf8').split('\n');
+            
+            const declaredCount = parseInt(dicContent[0].trim(), 10);
+            
+            let actualWordCount = 0;
+            for (let i = 1; i < dicContent.length; i++) {
+              const line = dicContent[i].trim();
+              if (line && !line.startsWith('#')) {
+                actualWordCount++;
+              }
+            }
+            
+            console.log('Declared word count on Line 1:', declaredCount);
+            console.log('Actual parsed word count:', actualWordCount);
+            
+            if (declaredCount !== actualWordCount) {
+              throw new Error('Mismatch! The word count on Line 1 (' + declaredCount + ') does not match the actual number of words (' + actualWordCount + ') in ku_TR.dic.');
+            }
+            console.log('Dictionary Integrity Check Passed!');
+          } catch (err) {
+            console.error('Dictionary Validation Failed:', err.message);
+            process.exit(1);
+          }
+          "
+
+      - name: Lint JavaScript Files
+        run: |
+          node -e "
+          const fs = require('fs');
+          const files = ['background.js', 'content.js', 'popup.js'];
+          let hasError = false;
+          
+          files.forEach(file => {
+            if (fs.existsSync(file)) {
+              try {
+                const code = fs.readFileSync(file, 'utf8');
+                new Function(code); // فحص سريع للـ Syntax الإملائي للكود
+                console.log('✅ ' + file + ' syntax is clean.');
+              } catch (err) {
+                console.error('❌ Syntax Error found in ' + file + ':', err.message);
+                hasError = true;
+              }
+            }
+          });
+          if (hasError) process.exit(1);
+          "
+
+      - name: Package Extension Archive (Artifact)
+        if: success()
+        run: |
+          mkdir build
+          zip -r build/kurdish-spell-checker-v1.zip . -x "*.git*" ".github*" "build*"
+
+      - name: Upload Build Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kurmanci-spell-checker-latest
+          path: build/kurdish-spell-checker-v1.zip
