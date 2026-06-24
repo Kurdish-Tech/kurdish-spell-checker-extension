@@ -1,0 +1,157 @@
+KEEPCASE K
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ku_TR.aff — Hunspell Affix File for Kurdish Kurmanci (Northern Kurdish)
+# Kurdish Tech Organization | Open Source
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# LANGUAGE: Kurdish Kurmanci (Kurmanji) — Latin alphabet
+# LOCALE:   ku_TR (Kurdish as used in Turkey/Northern region, Latin script)
+#
+# This file defines the morphological rules used by nspell/Hunspell to:
+#   1. Validate words by applying affix stripping rules.
+#   2. Generate spelling suggestions.
+#
+# ── HOW TO CONTRIBUTE ────────────────────────────────────────────────────────
+# This is a STARTER / TEMPLATE affix file for Kurmanci.
+# A linguist familiar with Kurmanci morphology should expand the SFX/PFX rules.
+#
+# Key resources:
+#   - Kurmanci grammar references (Bedirxan & Lescot 1970)
+#   - Rêzimana Kurdî (Kurdish Grammar by Amir Hassanpour)
+#   - Ferheng.org — Kurmanci-Kurdish dictionary project
+#   - GitHub: freedict/fd-dictionaries (Kurdish entries)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Encoding ──────────────────────────────────────────────────────────────────
+SET UTF-8
+
+# ── Word character set ────────────────────────────────────────────────────────
+# Kurmanci Latin alphabet characters (standard + special):
+#   Vowels:    a, e, ê, i, î, o, u, û
+#   Consonants: b, c, ç, d, f, g, h, j, k, l, m, n, p, q, r, s, ş, t, v, w, x, y, z
+TRY aeiouêîûbcçdfghjklmnpqrştvwxyzAEIOUÊÎÛBCÇDFGHJKLMNPQRŞTVWXYZ
+
+# ── Suggestion mechanics ──────────────────────────────────────────────────────
+# Maximum number of compound word suggestions
+MAXCPDSUGS 3
+
+# Word break characters
+WORDCHARS '-
+
+# Ignore characters (strip these before checking)
+IGNORE '
+
+# ── Case sensitivity ──────────────────────────────────────────────────────────
+# Kurdish proper nouns are capitalised — enable case-insensitive flag
+CHECKSHARPS
+
+# ── Compounding ───────────────────────────────────────────────────────────────
+# Kurdish Kurmanci forms compound words (e.g., xwendekar, malxweyî)
+# COMPOUNDMIN sets the minimum length of compound parts
+COMPOUNDMIN 3
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SUFFIX RULES (SFX)
+# Format: SFX <flag> <Y/N (cross-product)> <count>
+#         SFX <flag> <strip> <add> <condition>
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── SFX A: Ezafe/Construct State suffix -ê / -a ───────────────────────────────
+# In Kurmanci, the ezafe particle links nouns to adjectives/genitives.
+# Masculine singular: adds -ê (mêr → mêrê)
+# Feminine singular:  adds -a  (jin → jina)
+SFX A Y 4
+SFX A 0 ê  [^aeiouêîû]    # mêr → mêrê (masc, ends in consonant)
+SFX A 0 yê [aeiouêîû]     # kur → kuryê (masc, ends in vowel)
+SFX A 0 a  [^aeiouêîû]    # jin → jina  (fem, ends in consonant)
+SFX A 0 ya [aeiouêîû]     # keç → keçya (fem, ends in vowel) — approximation
+
+# ── SFX B: Plural suffix -an ──────────────────────────────────────────────────
+# Standard Kurmanci plural: xwendekar → xwendekaran
+SFX B Y 2
+SFX B 0 an  [^n]           # kitêb → kitêban
+SFX B n  an n              # xwendekar → xwendekaran (already ends in n — rare)
+
+# ── SFX C: Plural suffix -în (for specific noun classes) ─────────────────────
+SFX C Y 1
+SFX C 0 în  [^î]           # kur → kurîn — poetic/dialectal plural
+
+# ── SFX D: Oblique case suffix -ê (direct → oblique) ─────────────────────────
+# Singular oblique of masculine nouns
+SFX D Y 2
+SFX D 0 î   [^iîy]        # consonant-final: mêr → mêrî
+SFX D 0 yî  [aeiouêû]     # vowel-final noun in oblique
+
+# ── SFX E: Verb personal suffixes (present tense) ────────────────────────────
+# Present-tense endings vary by person and class.
+# This is a simplified approximation — a full verb morphology system requires
+# separate root stems per verb class in the .dic file.
+SFX E Y 6
+SFX E im im  .             # 1sg: ez dixwim
+SFX E î  î   .             # 2sg: tu dixwî
+SFX E e  e   .             # 3sg: ew dixwe
+SFX E in in  .             # 1pl: em dixwin
+SFX E in in  .             # 2pl: hûn dixwin
+SFX E in in  .             # 3pl: ew dixwin
+
+# ── SFX F: Diminutive suffix -ok ──────────────────────────────────────────────
+SFX F Y 1
+SFX F 0 ok  .              # kur → kurok (little boy)
+
+# ── SFX G: Agentive suffix -er / -kar ────────────────────────────────────────
+SFX G Y 2
+SFX G 0 er  .              # xwend → xwender (reader)
+SFX G 0 kar .              # xwend → xwendekar
+
+# ── SFX H: Adjectival suffix -î (nisbet suffix) ──────────────────────────────
+# Forms relational/nisbet adjectives: Kurd → Kurdî, welat → welatî
+SFX H Y 2
+SFX H 0 î   [^î]          # Kurd → Kurdî
+SFX H 0 tî  [aeiouêîû]    # vowel-final
+
+# ── SFX I: Verbal noun suffix -in ────────────────────────────────────────────
+# Verbal infinitive: xwandin, xwendin, ketin
+SFX I Y 1
+SFX I 0 in  .              # xwend → xwendin
+
+# ── SFX J: Gerundive/masdar suffix -an ───────────────────────────────────────
+SFX J Y 1
+SFX J 0 an  .              # xwend → xwendan
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PREFIX RULES (PFX)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── PFX di-: Present-tense verb prefix ───────────────────────────────────────
+# In Kurmanci present tense, the prefix di- is added to the verb stem.
+# e.g. xwin → dixwin, bêj → dibêj
+PFX P Y 1
+PFX P 0 di .               # dixwe, dixwîn, dibêj, diçim…
+
+# ── PFX na-: Negation prefix ─────────────────────────────────────────────────
+# Kurmanci negation uses na- (present) or ne- (past/subjunctive)
+PFX N Y 1
+PFX N 0 na .               # nadixwe, nabêj
+
+PFX M Y 1
+PFX M 0 ne .               # neçû, nehat
+
+# ── PFX bê-: Privative prefix ("without") ────────────────────────────────────
+PFX Q Y 1
+PFX Q 0 bê .               # bêmal (homeless), bêar (without honour)
+
+# ── PFX xwe-: Reflexive prefix ───────────────────────────────────────────────
+PFX R Y 1
+PFX R 0 xwe .              # xwexistin, xwebawerkirin
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# END OF AFFIX FILE
+#
+# NEXT STEPS FOR CONTRIBUTORS:
+# 1. Refine SFX E with proper verb class separation (Class I-VI in Kurmanci).
+# 2. Add passive voice constructions (-hat-, -hêt-).
+# 3. Add locative postpositions as separate suffix rules.
+# 4. Validate all rules against a native Kurmanci grammar reference.
+# 5. Test with the Ferheng.org dictionary wordlist.
+# ═══════════════════════════════════════════════════════════════════════════════

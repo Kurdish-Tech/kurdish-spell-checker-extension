@@ -1,0 +1,212 @@
+/**
+ * styles.css — Content Script Styles
+ * Kurdish Kurmanci Spell Checker | Kurdish Tech Organization
+ *
+ * These styles are injected into every page by the content script.
+ * All class names are namespaced with "kurmancsc-" to avoid collisions.
+ */
+
+/* ─── Misspelled Word Highlight ──────────────────────────────────────────────
+   Applied to <span> elements wrapping misspelled words inside contenteditables
+   and to the mirror-div spans overlaying textareas.
+*/
+.kurmancsc-misspelled {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='3'%3E%3Cpath d='M0 2 Q1.5 0 3 2 Q4.5 4 6 2' stroke='%23ef4444' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: bottom left;
+  background-size: 6px 3px;
+  padding-bottom: 2px;
+  cursor: pointer;
+  border-radius: 1px;
+  color: inherit;
+  transition: background-color 0.15s ease;
+}
+
+.kurmancsc-misspelled:hover {
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+/* ─── Textarea Mirror Div ────────────────────────────────────────────────────
+   A transparent overlay div that renders highlighted text above a <textarea>.
+   Pointer events are set to none in JS so it doesn't block typing.
+*/
+.kurmancsc-mirror {
+  position: absolute;
+  pointer-events: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+  background: transparent;
+  color: transparent;
+  z-index: 2147483600;
+}
+
+/* ─── Suggestion Popover ─────────────────────────────────────────────────────
+   A floating panel that appears below a misspelled word showing:
+   - The word itself
+   - A list of Kurmanci spelling suggestions
+   - "Add to dictionary" and "Ignore" actions
+*/
+#kurmancsc-popover {
+  position: absolute;
+  z-index: 2147483647;
+  min-width: 200px;
+  max-width: 320px;
+
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.4),
+    0 10px 30px -5px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(56, 189, 248, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+
+  font-family: -apple-system, 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  color: #e2e8f0;
+  overflow: hidden;
+
+  opacity: 0;
+  transform: translateY(-6px) scale(0.97);
+  pointer-events: none;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+
+#kurmancsc-popover.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+/* Header: word label + badge */
+.kurmancsc-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.kurmancsc-word-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #f1f5f9;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.kurmancsc-badge {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* Suggestion list */
+.kurmancsc-suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.kurmancsc-suggestions-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.kurmancsc-suggestions-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kurmancsc-suggestions-list::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 2px;
+}
+
+.kurmancsc-suggestion-item {
+  padding: 7px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #cbd5e1;
+  transition: background-color 0.1s ease, color 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kurmancsc-suggestion-item::before {
+  content: '→';
+  color: #38bdf8;
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.kurmancsc-suggestion-item:hover {
+  background: rgba(56, 189, 248, 0.12);
+  color: #f1f5f9;
+}
+
+.kurmancsc-suggestion-item:active {
+  background: rgba(56, 189, 248, 0.2);
+}
+
+/* No suggestions state */
+.kurmancsc-no-suggestions {
+  padding: 10px 14px;
+  color: #64748b;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Action buttons */
+.kurmancsc-popover-actions {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kurmancsc-action-btn {
+  width: 100%;
+  padding: 7px 10px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.1s ease, color 0.1s ease;
+  color: #f59e0b;
+}
+
+.kurmancsc-action-btn:hover {
+  background: rgba(245, 158, 11, 0.12);
+  color: #fbbf24;
+}
+
+.kurmancsc-action-secondary {
+  color: #94a3b8;
+}
+
+.kurmancsc-action-secondary:hover {
+  background: rgba(148, 163, 184, 0.08);
+  color: #cbd5e1;
+}

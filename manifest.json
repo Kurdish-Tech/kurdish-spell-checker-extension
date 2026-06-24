@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Kurdish Kurmanci Spell Checker",
+  "short_name": "Kurmanci SC",
+  "version": "1.0.0",
+  "description": "A professional spell checker for Kurdish Kurmanci (Northern Kurdish) written in the Latin alphabet. Built for Kurdish Tech.",
+  "author": "Kurdish Tech Organization",
+  "homepage_url": "https://github.com/kurdish-tech",
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Kurdish Kurmanci Spell Checker",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dictionary/ku_TR.aff",
+        "dictionary/ku_TR.dic",
+        "lib/nspell.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}
