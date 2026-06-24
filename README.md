@@ -121,15 +121,7 @@ See **`dictionary/README.md`** for full instructions. Quick summary:
 
 ## Expanding the Dictionary
 
-The MVP ships with ~400 core Kurmanci words. To build a production-grade dictionary:
-
-| Source | URL | Words |
-|--------|-----|-------|
-| Ferheng.org | https://ferheng.org | ~50,000 |
-| KurdishNLP Lexicon | https://github.com/KurdishNLP/Kurmanji-Lexicon | ~30,000 |
-| CLTKurmanji Corpus | Via CLARIN VLO (tag: kmr) | ~20,000 |
-| LibreOffice Extension | Search "Kurdish LibreOffice spell" | ~15,000 |
-
+The MVP ships with 83K core Kurmanci words. To build a production-grade dictionary and add more words, you can combine multiple sources and run a script to generate a new `.dic` file. See `dictionary/README.md` for details.
 ---
 
 ## Tech Stack
