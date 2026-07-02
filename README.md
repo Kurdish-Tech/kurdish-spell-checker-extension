@@ -35,7 +35,7 @@ kurdish-spell-checker/
 │
 ├── dictionary/
 │   ├── ku_TR.aff          ← Hunspell affix rules (Kurmanci morphology)
-│   ├── ku_TR.dic          ← Kurmanci word list (~400+ starter words)
+│   ├── ku_TR.dic          ← Kurmanci word list (382,632 words, production dictionary)
 │   └── README.md          ← Dictionary contribution guide
 │
 └── icons/
@@ -119,9 +119,18 @@ See **`dictionary/README.md`** for full instructions. Quick summary:
 
 ---
 
-## Expanding the Dictionary
+## Dictionary Data Source
 
-The MVP ships with 83K core Kurmanci words. To build a production-grade dictionary and add more words, you can combine multiple sources and run a script to generate a new `.dic` file. See `dictionary/README.md` for details.
+`dictionary/ku_TR.dic` is a **production dictionary of 382,632 Kurmancî words**, built from:
+
+- **41,851** original words from the extension's launch dictionary (hand-curated by Kurdish Tech Organization)
+- **299,065** words added from **Wîkîferheng** (ku.wiktionary.org), the Kurdish-language edition of Wiktionary — via the [kaikki.org/kuwiktionary](https://kaikki.org/kuwiktionary/index.html) structured extraction (`wiktextract`), filtered to Kurmancî-only entries and validated against the same Latin-Kurmanci character set `content.js` uses at runtime
+
+Wîkîferheng content is licensed **CC BY-SA 4.0 + GFDL**. If you redistribute this dictionary or a derivative of it, please retain attribution to Wîkîferheng/Wiktionary contributors and keep the derivative under a compatible share-alike license.
+
+New words added from this import are stored unflagged (no Hunspell affix codes) — they're recognized in their base form via nspell's default case-folding, but don't yet get the suffix/prefix-driven suggestion expansion that flagged legacy words do. Flagging them correctly needs a native-speaker morphology pass; contributions welcome (see `dictionary/README.md`).
+
+To add further vocabulary manually, see `dictionary/README.md` for the `.dic`/`.aff` format.
 ---
 
 ## Tech Stack
