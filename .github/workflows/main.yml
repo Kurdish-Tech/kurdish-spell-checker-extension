@@ -47,7 +47,10 @@ jobs:
             let actualWordCount = 0;
             for (let i = 1; i < dicContent.length; i++) {
               const line = dicContent[i].trim();
-              if (line && !line.startsWith('#')) {
+              // '# ' (hash + space) marks a real comment line; a bare '#/FLAGS'
+              // entry is the literal '#' punctuation character in the dictionary
+              // (KurdishHunspell tags punctuation marks as words) and must count.
+              if (line && !line.startsWith('# ')) {
                 actualWordCount++;
               }
             }
