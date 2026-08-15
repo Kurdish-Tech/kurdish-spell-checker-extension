@@ -35,7 +35,7 @@ kurdish-spell-checker/
 │
 ├── dictionary/
 │   ├── ku_TR.aff          ← Hunspell affix rules (Kurmanci morphology)
-│   ├── ku_TR.dic          ← Kurmanci word list (382,632 words, production dictionary)
+│   ├── ku_TR.dic          ← Kurmanci word list (382,637 words, production dictionary)
 │   └── README.md          ← Dictionary contribution guide
 │
 └── icons/
@@ -121,16 +121,39 @@ See **`dictionary/README.md`** for full instructions. Quick summary:
 
 ## Dictionary Data Source
 
-`dictionary/ku_TR.dic` is a **production dictionary of 382,632 Kurmancî words**, built from:
+`dictionary/ku_TR.dic` is a **production dictionary of 382,637 Kurmancî words**, built from:
 
-- **41,851** original words from the extension's launch dictionary (hand-curated by Kurdish Tech Organization)
-- **299,065** words added from **Wîkîferheng** (ku.wiktionary.org), the Kurdish-language edition of Wiktionary — via the [kaikki.org/kuwiktionary](https://kaikki.org/kuwiktionary/index.html) structured extraction (`wiktextract`), filtered to Kurmancî-only entries and validated against the same Latin-Kurmanci character set `content.js` uses at runtime
+- **~41,900** words with real, linguist-verified Hunspell affix flags, sourced from
+  [sinaahmadi/KurdishHunspell](https://github.com/sinaahmadi/KurdishHunspell) — these get full
+  suffix/prefix-driven suggestion expansion (e.g. `kitêb` correctly suggests `kitêba`, `kitêbê`, `kitêbî`, ...)
+- **~340,700** further words from the extension's original dictionary and **Wîkîferheng**
+  (ku.wiktionary.org, via [kaikki.org/kuwiktionary](https://kaikki.org/kuwiktionary/index.html)),
+  kept as unflagged entries — recognized in their exact form, no inflected-form suggestions yet
 
-Wîkîferheng content is licensed **CC BY-SA 4.0 + GFDL**. If you redistribute this dictionary or a derivative of it, please retain attribution to Wîkîferheng/Wiktionary contributors and keep the derivative under a compatible share-alike license.
+`dictionary/ku_TR.aff` is [KurdishHunspell](https://github.com/sinaahmadi/KurdishHunspell)'s Kurmanji
+affix file (`kmr/kmr-Latn.aff`), a peer-reviewed implementation based on
+[a formal description of Kurdish morphology](https://arxiv.org/ftp/arxiv/papers/2109/2109.03942.pdf) —
+replacing an earlier hand-written starter file that, in practice, was never wired to any word in the
+dictionary.
 
-New words added from this import are stored unflagged (no Hunspell affix codes) — they're recognized in their base form via nspell's default case-folding, but don't yet get the suffix/prefix-driven suggestion expansion that flagged legacy words do. Flagging them correctly needs a native-speaker morphology pass; contributions welcome (see `dictionary/README.md`).
+**License & attribution:** Wîkîferheng content is **CC BY-SA 4.0 + GFDL**; KurdishHunspell is
+**CC BY-SA 4.0, © Sina Ahmadi**. If you redistribute this dictionary or a derivative, retain both
+attributions and keep the derivative under a compatible share-alike license. If you use the
+morphological rules specifically, please cite:
 
-To add further vocabulary manually, see `dictionary/README.md` for the `.dic`/`.aff` format.
+```
+@article{ahmadi2020Hunspell,
+  title={{Hunspell for Sorani Kurdish Spell Checking and Morphological Analysis}},
+  author={Ahmadi, Sina}, journal={arXiv preprint arXiv:2109.06374}, year={2021},
+}
+@article{ahmadi2020formalization,
+  title={{A Formal Description of Sorani Kurdish Morphology}},
+  author={Ahmadi, Sina}, journal={arXiv preprint arXiv:2109.03942}, year={2021}
+}
+```
+
+To grow the tagged portion further or add more vocabulary, see `dictionary/README.md` for the
+`.dic`/`.aff` format and the current flag scheme.
 ---
 
 ## Tech Stack

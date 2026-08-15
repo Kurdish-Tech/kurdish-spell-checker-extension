@@ -41,19 +41,13 @@ SFX <flag> <strip> <add> <condition>
 
 ## Expanding the Dictionary
 
-### Step 1 — Obtain a Kurmanci Wordlist
+The properly-tagged portion of this dictionary now tracks
+[sinaahmadi/KurdishHunspell](https://github.com/sinaahmadi/KurdishHunspell) — that's the first place to
+check for newer/more entries before hand-tagging anything new. See "Where the dictionary comes from now"
+above for how the merge works and the exact flag scheme in use.
 
-#### Option A: Existing Hunspell Kurdish Dictionary
-A partial Hunspell dictionary exists in the LibreOffice extension repository:
-- Search: **"LibreOffice Kurdish spell checker"**
-- Extract `.aff` and `.dic` from the `.oxt` file (it's a ZIP archive)
-- Adapt the `.aff` rules to match this extension's flag set
-
-#### Option B: OpenOffice/Mozilla Dictionaries Repository
-```
-https://github.com/titoBouzout/Dictionaries
-```
-Look for `c` / `Kurdish.aff` — note these may be Sorani; **verify carefully**.
+For words outside that project's coverage, add them unflagged (recognize-only) to `ku_TR.dic`, same as
+the ~340,700 carried-over entries — a native-speaker morphology pass can flag them properly later.
 
 ---
 
@@ -77,23 +71,63 @@ Look for `c` / `Kurdish.aff` — note these may be Sorani; **verify carefully**.
 
 ## Affix Flag Reference
 
-| Flag | Rule Type | Description |
-|------|-----------|-------------|
-| A | SFX | Ezafe suffix: `-ê` (masc) / `-a` (fem) |
-| B | SFX | Plural: `-an` |
-| C | SFX | Plural: `-în` (poetic) |
-| D | SFX | Oblique case: `-î` |
-| E | SFX | Verb personal endings (present) |
-| F | SFX | Diminutive: `-ok` |
-| G | SFX | Agentive: `-er` / `-kar` |
-| H | SFX | Nisbet adjective: `-î` |
-| I | SFX | Verbal noun: `-in` |
-| J | SFX | Gerundive: `-an` |
-| P | PFX | Present tense prefix: `di-` |
-| N | PFX | Negation prefix: `na-` |
-| M | PFX | Negation prefix: `ne-` |
-| Q | PFX | Privative prefix: `bê-` |
-| R | PFX | Reflexive prefix: `xwe-` |
+As of the affix/morphology rewrite below, flags follow [KurdishHunspell](https://github.com/sinaahmadi/KurdishHunspell)'s scheme (aligned with [Universal Dependency](https://universaldependencies.org/u/pos/index.html) POS tags), not the older ad-hoc set:
+
+| Flag | Meaning |
+|------|---------|
+| N | Noun |
+| M | Masculine noun |
+| F | Feminine noun |
+| V | Verb, present stem |
+| I | Verb, past stem (intransitive) |
+| T | Verb, past stem (transitive) |
+| A | Adjective |
+| R | Adverb |
+| E | Numeral |
+| C | Conjunction |
+| D | Interjection |
+| B | Pronoun |
+| P | Adposition |
+| G | Particle |
+| X | Infinitive |
+| Z | Proper name |
+| W | Exceptional forms (e.g. `were` "come.imp.2s") |
+| H | Punctuation |
+| J | Numerals as digits |
+
+## Where the dictionary comes from now
+
+`ku_TR.aff` and the tagged portion of `ku_TR.dic` are sourced directly from
+[sinaahmadi/KurdishHunspell](https://github.com/sinaahmadi/KurdishHunspell) (`kmr/kmr-Latn.aff`,
+`kmr/kmr-Latn.dic`) — a peer-reviewed morphological analyzer for Kurmanji built on
+[a formal description of Kurdish morphology](https://arxiv.org/ftp/arxiv/papers/2109/2109.03942.pdf).
+That's ~41,900 lemmas with real, linguist-verified affix flags (the earlier `A`–`J`/`M`/`N`/`P`/`Q`/`R`
+scheme in this file was a hand-written starter template that, in practice, was never actually wired to
+any word in the dictionary — every entry was either unflagged or only carried the unrelated `KEEPCASE`
+flag). The remaining ~340,700 words already in this project's dictionary that aren't in KurdishHunspell's
+lexicon are kept as plain, unflagged entries — same recognize-only behavior as before, no regression.
+
+**License & attribution:** KurdishHunspell is CC BY-SA 4.0, © Sina Ahmadi. If you redistribute this
+dictionary or a derivative, keep the attribution and cite:
+
+```
+@article{ahmadi2020Hunspell,
+  title={{Hunspell for Sorani Kurdish Spell Checking and Morphological Analysis}},
+  author={Ahmadi, Sina},
+  journal={arXiv preprint arXiv:2109.06374},
+  year={2021},
+}
+@article{ahmadi2020formalization,
+  title={{A Formal Description of Sorani Kurdish Morphology}},
+  author={Ahmadi, Sina},
+  journal={arXiv preprint arXiv:2109.03942},
+  year={2021}
+}
+```
+
+To grow the tagged (properly-inflecting) portion further, pull newer entries from KurdishHunspell's
+`kmr-Latn.dic` as they publish updates, or tag more of the remaining unflagged words by hand — either
+way, flags need to match *this* scheme now, not the old one.
 
 ---
 
