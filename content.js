@@ -136,10 +136,13 @@ function showPopover(spanEl, word, suggestions) {
   // Header
   const header = document.createElement("div");
   header.className = "kurmancsc-popover-header";
-  header.innerHTML = `
-    <span class="kurmancsc-word-label">${escapeHtml(word)}</span>
-    <span class="kurmancsc-badge">Kurmanci</span>
-  `;
+  const wordLabel = document.createElement("span");
+  wordLabel.className = "kurmancsc-word-label";
+  wordLabel.textContent = word;
+  const badge = document.createElement("span");
+  badge.className = "kurmancsc-badge";
+  badge.textContent = "Kurmanci";
+  header.append(wordLabel, badge);
   popover.appendChild(header);
 
   if (suggestions.length === 0) {
@@ -399,9 +402,9 @@ async function updateTextareaMirror(textarea) {
   const mirror = getOrCreateMirror(textarea);
   syncMirrorStyle(textarea, mirror);
 
-  // Build mirror HTML
+  // Build mirror content with DOM nodes (no HTML parsing of page text)
   WORD_REGEX.lastIndex = 0;
-  let html = "";
+  const fragment = document.createDocumentFragment();
   let lastIndex = 0;
   let match;
 
@@ -411,19 +414,23 @@ async function updateTextareaMirror(textarea) {
     const end = start + word.length;
     const cached = resultCache.get(word);
 
-    html += escapeHtml(text.slice(lastIndex, start));
+    fragment.append(text.slice(lastIndex, start));
 
     if (cached && !cached.correct) {
-      html += `<span class="${MISSPELLED_CLASS}" data-word="${escapeHtml(word)}">${escapeHtml(word)}</span>`;
+      const span = document.createElement("span");
+      span.className = MISSPELLED_CLASS;
+      span.dataset.word = word;
+      span.textContent = word;
+      fragment.append(span);
     } else {
-      html += escapeHtml(word);
+      fragment.append(word);
     }
 
     lastIndex = end;
   }
 
-  html += escapeHtml(text.slice(lastIndex));
-  mirror.innerHTML = html;
+  fragment.append(text.slice(lastIndex));
+  mirror.replaceChildren(fragment);
   mirror.scrollTop = textarea.scrollTop;
 
   // Click handler on mirror spans to show popover

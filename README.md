@@ -1,6 +1,6 @@
 # Kurdish Kurmanci Spell Checker
 
-**A professional Manifest V3 Chrome Extension for real-time Kurdish Kurmanci (Northern Kurdish) spell checking.**
+**A professional Manifest V3 browser extension (Chrome, Edge and Firefox) for real-time Kurdish Kurmanci (Northern Kurdish) spell checking.**
 
 > Built by Kurdish Tech Organization · Open Source · Latin Alphabet Only
 
@@ -23,8 +23,10 @@
 ```
 kurdish-spell-checker/
 │
-├── manifest.json          ← Chrome Extension Manifest V3 config
-├── background.js          ← Service Worker: dictionary init + message handler
+├── manifest.json          ← Manifest V3 config (Chrome / Edge)
+├── manifest.firefox.json  ← Manifest V3 config (Firefox: event page + gecko settings)
+├── scripts/build.mjs      ← Builds dist/chromium and dist/firefox packages
+├── background.js          ← Service Worker / event page: dictionary init + message handler
 ├── content.js             ← Content Script: scan, highlight, suggest
 ├── styles.css             ← Injected CSS: underline style + popover UI
 ├── popup.html             ← Extension popup UI
@@ -57,6 +59,23 @@ kurdish-spell-checker/
 6. The extension icon appears in the toolbar — click it to enable/disable
 
 > ⚠️ Do **not** move or delete the folder after loading — Chrome reads it live.
+
+**Microsoft Edge** uses the same package: open `edge://extensions/`, enable *Developer mode*, then *Load unpacked*.
+
+**Firefox** needs its own manifest, so build it first (see below), then open `about:debugging#/runtime/this-firefox` → *Load Temporary Add-on…* → pick `dist/firefox/manifest.json`. Requires Firefox 140 or newer.
+
+## Building store packages
+
+```bash
+node scripts/build.mjs                                  # creates dist/chromium and dist/firefox
+npx web-ext lint  -s dist/firefox                       # Mozilla's add-on validator
+npx web-ext build -s dist/firefox  -a dist/artifacts/firefox
+npx web-ext build -s dist/chromium -a dist/artifacts/chromium
+```
+
+The Chromium zip is what the Chrome Web Store and Microsoft Edge Add-ons accept; the Firefox zip is for addons.mozilla.org.
+
+> `lib/nspell.js` is the unmodified [nspell](https://github.com/wooorm/nspell) package bundled with browserify; the extension itself does no network requests and collects no data — the dictionary is loaded from inside the package.
 
 ---
 

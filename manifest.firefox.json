@@ -1,0 +1,79 @@
+{
+  "manifest_version": 3,
+  "name": "Kurdish Kurmanci Spell Checker",
+  "short_name": "Kurmanci SC",
+  "version": "1.1.0",
+  "description": "A professional spell checker for Kurdish Kurmanci (Northern Kurdish) written in the Latin alphabet. Built for Kurdish Tech.",
+  "author": "Kurdish Tech Organization",
+  "homepage_url": "https://github.com/kurdish-tech",
+  "permissions": [
+    "storage",
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "lib/nspell.js",
+      "background.js"
+    ]
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "kurmanci-spellchecker@kurdish-tech.github.io",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": [
+          "none"
+        ]
+      }
+    },
+    "gecko_android": {
+      "strict_min_version": "142.0"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Kurdish Kurmanci Spell Checker",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "dictionary/ku_TR.aff",
+        "dictionary/ku_TR.dic",
+        "lib/nspell.js"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+}

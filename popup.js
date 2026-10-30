@@ -19,7 +19,15 @@ const sessionErrors  = document.getElementById('sessionErrors');
 function setStatus(state, message) {
   // state: 'loading' | 'ready' | 'error'
   statusDot.className = 'status-dot ' + state;
-  statusText.innerHTML = message;
+  statusText.textContent = '';
+  if (state === 'loading') {
+    const span = document.createElement('span');
+    span.className = 'loading-text';
+    span.textContent = message;
+    statusText.appendChild(span);
+  } else {
+    statusText.textContent = message;
+  }
 }
 
 function animateCounter(el, target) {
@@ -60,11 +68,11 @@ function pollStatus() {
       return;
     }
     if (response.ready) {
-      setStatus('ready', 'Kurmanci dictionary loaded &amp; ready');
+      setStatus('ready', 'Kurmanci dictionary loaded & ready');
     } else if (response.error) {
       setStatus('error', 'Dictionary error — see README for setup');
     } else {
-      setStatus('loading', '<span class="loading-text">Loading Kurmanci dictionary…</span>');
+      setStatus('loading', 'Loading Kurmanci dictionary…');
       setTimeout(pollStatus, 1200);
     }
   });

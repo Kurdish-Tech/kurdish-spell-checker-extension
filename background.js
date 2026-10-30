@@ -14,10 +14,15 @@
 'use strict';
 
 // ─── Load nspell UMD bundle ───────────────────────────────────────────────────
-try {
-  importScripts('lib/nspell.js');
-} catch (e) {
-  console.error('[KurmancSC] Failed to importScripts nspell.js:', e);
+// Chromium runs this file as a service worker (importScripts available).
+// Firefox runs it as an event page and loads lib/nspell.js through the
+// manifest's "background.scripts" list instead, so importScripts is absent.
+if (typeof importScripts === 'function') {
+  try {
+    importScripts('lib/nspell.js');
+  } catch (e) {
+    console.error('[KurmancSC] Failed to importScripts nspell.js:', e);
+  }
 }
 
 // ─── State ────────────────────────────────────────────────────────────────────

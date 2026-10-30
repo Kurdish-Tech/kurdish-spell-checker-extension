@@ -90,6 +90,11 @@ jobs:
           if (hasError) process.exit(1);
           "
 
+      - name: Build browser packages and lint the Firefox build
+        run: |
+          node scripts/build.mjs
+          npx --yes web-ext lint -s dist/firefox
+
       - name: Package Extension Archive (Artifact)
         if: success()
         run: |
