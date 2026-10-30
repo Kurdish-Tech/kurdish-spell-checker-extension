@@ -206,7 +206,10 @@ This extension is **exclusively** for **Kurdish Kurmanci** in the **Latin alphab
 
 ## License
 
-MIT License — Kurdish Tech Organization
+- **Code:** MIT License — Kurdish Tech Organization
+- **Dictionary** (`dictionary/ku_TR.*`): CC BY-SA 4.0, derived from [KurdishHunspell](https://github.com/sinaahmadi/KurdishHunspell) by Sina Ahmadi
+
+See [LICENSE](LICENSE) for details.
 
 ---
 
