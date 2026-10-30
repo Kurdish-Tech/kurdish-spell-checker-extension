@@ -75,7 +75,16 @@ npx web-ext build -s dist/chromium -a dist/artifacts/chromium
 
 The Chromium zip is what the Chrome Web Store and Microsoft Edge Add-ons accept; the Firefox zip is for addons.mozilla.org.
 
-> `lib/nspell.js` is the unmodified [nspell](https://github.com/wooorm/nspell) package bundled with browserify; the extension itself does no network requests and collects no data — the dictionary is loaded from inside the package.
+### Rebuilding `lib/nspell.js`
+
+`lib/nspell.js` is the unmodified [nspell](https://github.com/wooorm/nspell) 2.1.5 package bundled with browserify 17.0.1 (versions pinned in `package.json` / `package-lock.json`). To regenerate it byte-for-byte (requires Node.js 18+):
+
+```bash
+npm ci
+npm run build:nspell
+```
+
+All other files are plain, unminified source. The extension makes no network requests and collects no data — the dictionary is loaded from inside the package.
 
 ---
 
