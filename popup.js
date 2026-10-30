@@ -14,6 +14,9 @@ const statusText     = document.getElementById('statusText');
 const sessionChecked = document.getElementById('sessionChecked');
 const sessionErrors  = document.getElementById('sessionErrors');
 
+const versionBadge = document.getElementById('versionBadge');
+if (versionBadge) versionBadge.textContent = 'v' + chrome.runtime.getManifest().version;
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function setStatus(state, message) {

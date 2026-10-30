@@ -7,7 +7,7 @@ const FILES = ['background.js', 'content.js', 'popup.html', 'popup.js', 'styles.
 const DIRS = ['lib', 'icons'];
 const DICT = ['ku_TR.aff', 'ku_TR.dic'];
 
-rmSync('dist', { recursive: true, force: true });
+for (const t of ['chromium', 'firefox']) rmSync(join('dist', t), { recursive: true, force: true });
 
 for (const [target, manifest] of [['chromium', 'manifest.json'], ['firefox', 'manifest.firefox.json']]) {
   const out = join('dist', target);
